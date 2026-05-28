@@ -1,0 +1,5 @@
+anthropic
+python-dotenv
+pyyaml
+python-hcl2
+rich

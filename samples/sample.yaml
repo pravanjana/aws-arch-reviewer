@@ -1,0 +1,29 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Sample CloudFormation template with intentional issues
+
+Resources:
+
+  MyS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: my-sample-bucket
+      AccessControl: PublicRead
+
+  MyCloudFrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Origins:
+          - DomainName: my-sample-bucket.s3.amazonaws.com
+            Id: S3Origin
+        DefaultCacheBehavior:
+          ViewerProtocolPolicy: allow-all
+          ForwardedValues:
+            QueryString: false
+        Enabled: true
+
+  MyEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t3.2xlarge
+      ImageId: ami-0abcdef1234567890
