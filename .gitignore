@@ -3,3 +3,4 @@ __pycache__/
 *.pyc
 report_*.md
 chroma_db/
+.DS_Store

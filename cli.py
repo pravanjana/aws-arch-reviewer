@@ -67,6 +67,11 @@ def main():
         required=True,
         help="Path to CloudFormation or Terraform file"
     )
+    arg_parser.add_argument(
+        "--summary",
+        action="store_true",
+        help="Show only HIGH severity findings"
+    )
     args = arg_parser.parse_args()
 
     # Step 1 - Parse the IaC file
@@ -77,10 +82,15 @@ def main():
     console.print("[cyan]Sending to Claude for review...[/cyan]\n")
     findings = review_iac(parsed)
 
-    # Step 3 - Display findings
+    # Step 3 - Filter findings if --summary flag is passed
+    if args.summary:
+        findings = [f for f in findings if f["severity"] == "HIGH"]
+        console.print("[yellow]⚠️  Summary mode — showing HIGH severity only[/yellow]\n")
+
+    # Step 4 - Display findings
     display_findings(findings, args.file, parsed["type"])
 
-    # Step 4 - Generate Markdown report
+    # Step 5 - Generate Markdown report
     report_file = generate_report(findings, args.file, parsed["type"])
     console.print(f"\n[green]✅ Report saved:[/green] {report_file}\n")
 
